@@ -1,0 +1,58 @@
+# 换电脑使用
+
+需要 Python 3.10 或更高版本，以及能访问 Tripo 官方 API 的网络。生成、上传、查询、下载不依赖 Node、Blender 或 pip 库；真实渲染和引擎验收使用目标电脑已有的 3D 工具。以下 `python` 在 macOS/Linux 通常写作 `python3`，Windows 可使用 `py -3`。
+
+## 安装
+
+解压 `tripo-3d.zip`。在解压出的 `tripo-3d` 文件夹中打开终端：
+
+```bash
+python scripts/install.py
+```
+
+默认复制到当前用户的 Codex skills 目录，遵守已设置的 `CODEX_HOME`。已安装时不会覆盖旧目录。也可选择：
+
+```bash
+python scripts/install.py --target claude
+python scripts/install.py --target agents
+python scripts/install.py --dest "/path/to/custom/skills"
+```
+
+Claude/其他兼容 Agent 读取相同 `SKILL.md`；不要求 Codex 专用工具。安装后开启一个新会话，让应用重新发现 skill。在不支持该目录自动发现的应用里，直接让 Agent 读取解压目录中的 `SKILL.md`。
+
+## 提供新密钥
+
+在交互式终端运行：
+
+```bash
+python scripts/tripo.py doctor
+python scripts/tripo.py configure
+python scripts/tripo.py doctor --online
+```
+
+`configure` 隐藏输入、向官方查询余额验证密钥，然后存入本机用户配置目录：
+
+- macOS/Linux：`$XDG_CONFIG_HOME/tripo-3d/credentials.json`，未设置时为 `~/.config/tripo-3d/credentials.json`。
+- Windows：`%LOCALAPPDATA%/Tripo3D/credentials.json`。
+
+配置是本地明文文件，不是系统钥匙串；Unix 权限为 0600。它位于 skill 包和游戏项目之外，迁移包不包含此文件。共享电脑或不想落盘时，用环境变量 `TRIPO_API_KEY`；环境变量优先于本机配置。也可以不预配置，让单次命令在交互终端隐藏询问；该次输入不保存。
+
+不要把真实密钥写进终端命令行、提示词文件、前端 `.env` 或提交记录。用 Agent 调用时，通过环境注入或由自己在交互终端执行 `configure`。删除上述配置文件即可移除持久密钥；无需修改 skill。
+
+## 使用示例
+
+新会话直接说：
+
+> 使用 $tripo-3d，把这张参考图做成一个带 PBR 材质的 GLB 模型。先检查正面和背面外形，再按照我的要求细化。
+
+> 使用 $tripo-3d，制作一个可控游戏角色，带 idle、walk、run、jump。沿用当前项目的控制器，导入后检查跳跃、手持道具和穿模。
+
+> 使用 $tripo-3d，继续这个 jobs 文件夹中已提交的任务，不要重新生成。
+
+执行 `python scripts/selftest.py` 可以离线检查脚本是否正常。`doctor --online` 只检查账户连通性，不生成模型。生成、绑骨、动画等费用按官方当前账户计费。
+
+## 搬迁范围
+
+只迁移 skill：复制完整 `tripo-3d/`，在新电脑配置新密钥。
+
+继续已有任务：另外复制项目内的请求 JSON 和 `jobs/`，保留相对目录与 `job.json`；新密钥必须能访问原任务所在账户。只换电脑但没有任务记录时，先到官方账户核对任务，不能把所有阶段自动重跑。下载后的完整模型可以离线使用，不需要原账户密钥。

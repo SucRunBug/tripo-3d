@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tripo 3D 建模"
+  short_description: "使用官方 Tripo API 生成、细化和绑定 3D 模型，并检查外形与游戏接入"
+  default_prompt: "使用 $tripo-3d，根据我的描述或参考图生成 3D 模型，检查外形，并按用途完成绑定动画或格式导出。"
