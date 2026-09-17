@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path, PurePosixPath
 import re
+import shlex
 import shutil
 import ssl
 import sys
@@ -80,15 +81,41 @@ def credentials_path():
     return Path(os.environ.get('XDG_CONFIG_HOME', Path.home() / '.config')) / 'tripo-3d/credentials.json'
 
 
+def setup_guide():
+    command = [sys.executable, str(Path(__file__).resolve()), 'configure']
+    if os.name == 'nt':
+        import subprocess
+        configure_command = subprocess.list2cmdline(command)
+    else:
+        configure_command = shlex.join(command)
+    return {
+        'console_url': 'https://platform.tripo3d.ai',
+        'steps': [
+            '注册或登录 Tripo 开发者控制台，进入 API Keys，点击 Create Key。',
+            '复制并妥善保存完整密钥；官方说明只在创建时展示一次。',
+            '在自己的交互终端运行下面的 configure_command，粘贴密钥后按回车。输入不显示字符是正常的，无需发到聊天。',
+            '显示 configured: true 表示验证并保存成功；随后运行 doctor --online 复核账户连接。验证不会生成模型。',
+        ],
+        'configure_command': configure_command,
+        'help_file': str(Path(__file__).resolve().parent.parent / 'INSTALL.md'),
+    }
+
+
+def print_setup_guide():
+    print(json.dumps(setup_guide(), ensure_ascii=False, indent=2), file=sys.stderr, flush=True)
+
+
 def get_key():
     global SECRET
     key = os.environ.get('TRIPO_API_KEY', '').strip()
     if not key and credentials_path().exists():
         key = str(read(credentials_path()).get('api_key', '')).strip()
     if not key and sys.stdin.isatty():
+        print_setup_guide()
         key = getpass.getpass('Tripo API key (hidden, not saved): ').strip()
     if not key:
-        raise TripoError('No API key. Run configure in an interactive terminal or set TRIPO_API_KEY.')
+        print_setup_guide()
+        raise TripoError('No API key. Follow the setup guide above, or set TRIPO_API_KEY in your environment.')
     SECRET = key
     return key
 
@@ -456,6 +483,8 @@ def main(argv=None):
               'key_present': bool(os.environ.get('TRIPO_API_KEY')) or credentials_path().exists(),
               'credentials_file': str(credentials_path()), 'api_origin': BASE,
               'optional_blender': shutil.which('blender'), 'dependencies': 'Python standard library only'})
+        if not os.environ.get('TRIPO_API_KEY', '').strip() and not credentials_path().exists():
+            print_setup_guide()
         if not args.online:
             return 0
     if args.command == 'submit':
@@ -466,6 +495,7 @@ def main(argv=None):
             emit({'would_submit': request, 'job': str(args.job), 'network_requests': 0})
             return 0
     if args.command == 'configure':
+        print_setup_guide()
         if not sys.stdin.isatty():
             raise TripoError('configure requires an interactive terminal to hide the key. Alternatively set TRIPO_API_KEY.')
         global SECRET

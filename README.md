@@ -13,7 +13,9 @@
 - **资产交付**：下载模型与贴图、校验 GLB、检查 ZIP 路径，生成文件清单和 SHA-256。
 - **游戏接入**：控制器、跳跃状态、手持物挂点、IK、蒙皮权重、角色与场景碰撞的实践指南。
 
-## 快速安装
+## 快速开始
+
+先到 [Tripo 开发者控制台](https://platform.tripo3d.ai) 注册或登录，进入 **API Keys → Create Key**，创建并复制密钥。完整密钥只在创建时显示一次。详细步骤见 [获取 API Key 与配置说明](INSTALL.md#获取-api-key)。
 
 ```bash
 git clone https://github.com/SucRunBug/tripo-3d.git
@@ -24,7 +26,7 @@ python scripts/tripo.py configure
 
 macOS/Linux 的 Python 命令通常是 `python3`；Windows 可使用 `py -3`。
 
-`configure` 会隐藏输入密钥，验证后保存到本机用户配置目录，具体位置见 [安装说明](INSTALL.md)。不想落盘时，可通过环境变量 `TRIPO_API_KEY` 提供密钥。不要把密钥写进仓库或前端代码。
+`configure` 提示后粘贴密钥、按回车；输入不显示字符是正常的。显示 `configured: true` 表示验证并保存成功，再运行 `python scripts/tripo.py doctor --online` 复核账户连接，不会生成模型。具体位置和常见问题见 [安装说明](INSTALL.md)。不想落盘时，可通过环境变量 `TRIPO_API_KEY` 提供密钥。无需把密钥发到聊天中。
 
 默认安装到 Codex 的 skills 目录；也支持：
 
@@ -60,7 +62,7 @@ python scripts/selftest.py
 python scripts/inspect_glb.py /path/to/model.glb --out audit.json
 ```
 
-附带 20 项离线测试，无需密钥、不产生 Tripo 费用；另已用实际角色 GLB 和动画文件验证结构检查脚本。外形和动态变形仍需在 3D 查看器或目标引擎中实测；基础包不捆绑 Blender 或游戏引擎。
+附带 22 项离线测试，无需密钥、不产生 Tripo 费用；另已用实际角色 GLB 和动画文件验证结构检查脚本。外形和动态变形仍需在 3D 查看器或目标引擎中实测；基础包不捆绑 Blender 或游戏引擎。
 
 ## 来源
 

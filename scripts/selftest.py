@@ -56,6 +56,37 @@ class PortableSkillTests(unittest.TestCase):
         self.temp.cleanup()
         tripo.SECRET = ''
 
+    def test_first_run_doctor_guides_without_network_or_prompt(self):
+        with patch.dict(os.environ, {'TRIPO_API_KEY': ''}), \
+             patch.object(tripo, 'credentials_path', return_value=self.root/'credentials.json'), \
+             patch.object(tripo, 'Client') as client, \
+             patch.object(tripo.getpass, 'getpass') as prompt, \
+             patch('sys.stdout', new=io.StringIO()) as output, \
+             patch('sys.stderr', new=io.StringIO()) as guidance:
+            self.assertEqual(tripo.main(['doctor']), 0)
+            self.assertFalse(json.loads(output.getvalue())['key_present'])
+            guide = json.loads(guidance.getvalue())
+            self.assertEqual(urllib.parse.urlparse(guide['console_url']).netloc, 'platform.tripo3d.ai')
+            self.assertTrue(Path(guide['help_file']).is_file())
+            client.assert_not_called()
+            prompt.assert_not_called()
+
+    def test_configure_validates_and_saves_without_exposing_key(self):
+        secret = 'test-private-credential'
+        path = self.root/'credentials.json'
+        with patch.object(tripo, 'credentials_path', return_value=path), \
+             patch('sys.stdin.isatty', return_value=True), \
+             patch.object(tripo.getpass, 'getpass', return_value=secret), \
+             patch.object(tripo, 'Client') as client, \
+             patch('sys.stdout', new=io.StringIO()) as output, \
+             patch('sys.stderr', new=io.StringIO()) as guidance:
+            client.return_value.api.return_value = {'balance': 0, 'frozen': 0}
+            self.assertEqual(tripo.main(['configure']), 0)
+            client.return_value.api.assert_called_once_with('/v3/account/balance')
+            self.assertTrue(json.loads(output.getvalue())['configured'])
+            self.assertEqual(tripo.read(path)['api_key'], secret)
+            self.assertNotIn(secret, output.getvalue() + guidance.getvalue())
+
     def test_same_request_reuses_id(self):
         first = tripo.submit(self.client, REQUEST, self.job)
         second = tripo.submit(self.client, REQUEST, self.job)
