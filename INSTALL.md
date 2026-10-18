@@ -1,4 +1,6 @@
-# 换电脑使用
+# 开发环境安装与迁移
+
+本项目用于 AI 制作游戏：Tripo 制作资产，Blender 检查与处理，国际版 Unity 接入玩法。本文介绍 Tripo Skill 安装与迁移、Blender CLI 配置；国际版 Unity Editor、Unity CLI 和 Pipeline 的大致步骤见 [README 的 Unity 配置](README.md#unity-cli)，该部分只参考官方文档，未本机测试。
 
 需要 Python 3.10 或更高版本，以及能访问 Tripo 官方 API 的网络。生成、上传、查询、下载不依赖 Node、Blender 或 pip 库；真实渲染和引擎验收使用目标电脑已有的 3D 工具。以下 `python` 在 macOS/Linux 通常写作 `python3`，Windows 可使用 `py -3`。
 
