@@ -1,0 +1,134 @@
+{
+  "ok": true,
+  "platform": "macOS-15.7.4-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.7",
+  "upstream": "https://github.com/HKUDS/CLI-Anything.git",
+  "revision": "34f519533bc175d2fe287ab8316b0dd99bb9cc43",
+  "log": "<runtime>/logs/20261018T095255060186Z.log",
+  "tested_at_utc": "20261018T095255060186Z",
+  "blender": "/Applications/Blender.app/Contents/MacOS/Blender",
+  "blender_version": "Blender 5.2.0 LTS",
+  "packages": [
+    "cli-anything-blender @ file://<runtime>/source/blender/agent-harness",
+    "click==8.5.0",
+    "prompt_toolkit==3.0.53",
+    "wcwidth==0.9.2"
+  ],
+  "smoke": {
+    "project": "<runtime>/checks/20261018T095255060186Z/smoke.blend-cli.json",
+    "image": "<runtime>/checks/20261018T095255060186Z/smoke.png",
+    "width": 320,
+    "height": 240,
+    "sha256": "b9e75eca1d398fe7186eefe43186de40ed147b4c4821afbbc0245b1862261572",
+    "repository_image": "assets/blender-cli-macos-smoke.png"
+  },
+  "command": "~/.local/bin/cli-anything-blender",
+  "activate": "<runtime>/activate.sh",
+  "timezone": "Asia/Shanghai",
+  "test_date_local": "2026-10-18",
+  "offline_tests": {
+    "existing_passed": 22,
+    "blender_setup_passed": 6
+  },
+  "reproduced_tutorial_failures": [
+    {
+      "command": [
+        "/bin/zsh",
+        "-c",
+        "blender --version"
+      ],
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "zsh:1: command not found: blender\n"
+    },
+    {
+      "command": [
+        "<custom-runtime>/public bin/cli-anything-blender",
+        "scene",
+        "new",
+        "--name",
+        "ProductShot",
+        "--width",
+        "1920",
+        "--height",
+        "1080"
+      ],
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "Usage: cli-anything-blender scene new [OPTIONS]\nTry 'cli-anything-blender scene new --help' for help.\n\nError: No such option '--width'.\n"
+    },
+    {
+      "command": [
+        "<custom-runtime>/public bin/cli-anything-blender",
+        "--project",
+        "<custom-runtime>/checks/20261018T095024580926Z/smoke.blend-cli.json",
+        "object",
+        "add",
+        "-t",
+        "cube",
+        "-n",
+        "ProductBox",
+        "--size",
+        "2"
+      ],
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "Usage: cli-anything-blender object add [OPTIONS] {cube|sphere|cylinder|cone|pl\n                                       ane|torus|monkey|empty}\nTry 'cli-anything-blender object add --help' for help.\n\nError: No such option '-t'.\n"
+    },
+    {
+      "command": [
+        "<custom-runtime>/public bin/cli-anything-blender",
+        "--project",
+        "<custom-runtime>/checks/20261018T095024580926Z/smoke.blend-cli.json",
+        "material",
+        "create",
+        "-n",
+        "MatRed",
+        "--color",
+        "#cc3333"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Error: could not convert string to float: '#cc3333'\n"
+    },
+    {
+      "command": [
+        "<custom-runtime>/public bin/cli-anything-blender",
+        "--json",
+        "scene",
+        "info",
+        "--project",
+        "<custom-runtime>/checks/20261018T095024580926Z/smoke.blend-cli.json"
+      ],
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "Usage: cli-anything-blender scene info [OPTIONS]\nTry 'cli-anything-blender scene info --help' for help.\n\nError: No such option '--project'.\n"
+    },
+    {
+      "command": [
+        "<custom-runtime>/public bin/cli-anything-blender",
+        "--project",
+        "<custom-runtime>/checks/20261018T095024580926Z/smoke.blend-cli.json",
+        "render",
+        "start",
+        "--output",
+        "<custom-runtime>/old-render.png"
+      ],
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "Usage: cli-anything-blender render [OPTIONS] COMMAND [ARGS]...\nTry 'cli-anything-blender render --help' for help.\n\nError: No such command 'start'.\n"
+    }
+  ],
+  "restricted_environment_failure": {
+    "blender_returncode": -11,
+    "png_created": false,
+    "resolution": "Re-run the same --check with normal local execution permissions; render succeeded. Root cause not further diagnosed."
+  },
+  "activated_path_check": {
+    "ok": true,
+    "tested_at_utc": "20261018T095547787725Z",
+    "blender_version": "Blender 5.2.0 LTS",
+    "png_sha256": "063c4954c835785761d95ec4d41705eae2f299361ea3846a83b1b3a2412d382a"
+  }
+}

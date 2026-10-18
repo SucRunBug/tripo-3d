@@ -20,6 +20,39 @@ python scripts/install.py --dest "/path/to/custom/skills"
 
 Claude/其他兼容 Agent 读取相同 `SKILL.md`；不要求 Codex 专用工具。安装后开启一个新会话，让应用重新发现 skill。在不支持该目录自动发现的应用里，直接让 Agent 读取解压目录中的 `SKILL.md`。
 
+### 可选：一键配置 Blender CLI
+
+本功能用于本地场景操作和真实渲染；不需要 Tripo 密钥。**本机测试平台为 macOS / Apple Silicon**，详见 [环境版本、完整命令和失败记录](references/blender-cli.md)。先装好 Blender、Python 3.10+ 和 Git，然后执行：
+
+```bash
+# 已安装 Skill，只配置 Blender CLI
+python3 scripts/setup_blender.py
+
+# 首次安装 Skill 并同时配置 Blender CLI（两条选一条）
+python3 scripts/install.py --with-blender
+```
+
+默认运行环境保存在 `~/.local/share/tripo-3d/blender-cli/`，命令入口在 `~/.local/bin/cli-anything-blender`。自动使用独立 venv，不向系统 Python 装库，不覆盖其他工具的同名命令，不修改 shell 启动文件。按输出提示执行一次：
+
+```bash
+source "$HOME/.local/share/tripo-3d/blender-cli/activate.sh"
+cli-anything-blender --help
+blender --version
+```
+
+这会给当前终端添加命令路径。新终端按需重新 source；也可自行把这条 source 放进自己的 shell 配置。失败后根据打印的日志修复，再运行原命令；Skill 已复制成功但 CLI 配置失败时，使用 `setup_blender.py` 重试，避免重复安装 Skill。已有 Skill 不会被 `install.py` 覆盖。
+
+```bash
+# 无下载复检（创建新的测试场景并真实渲染）
+python3 scripts/setup_blender.py --check
+
+# 自定义路径；--blender 指向可执行文件，不是 .app 目录
+python3 scripts/setup_blender.py --home "/path/with spaces/blender-cli" \
+  --bin-dir "/path/to/bin" --blender "/Applications/Blender.app/Contents/MacOS/Blender"
+```
+
+自定义位置复检时需重复传入相同的 `--home`、`--bin-dir`，Blender 不在默认位置时也传 `--blender`。不要移动或删除安装环境，否则命令入口会失效。详细目录、卸载和平台限制见上面的专门说明。
+
 ## 获取 API Key
 
 API Key 是让这个 skill 访问你 Tripo 账户的访问凭据。第一次使用时：

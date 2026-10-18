@@ -13,6 +13,12 @@ description: 使用 Tripo 官方 API 从文字、单图或多视图生成和细�
 2. 从用户请求判断目标：静态道具、可动画角色、展示/AR、打印，或者已有模型细化。保留明确的风格、外形、输出格式和预算；只补充影响建模的缺失信息。用户已给参考图时优先使用参考图，不擅自换成文字猜测。
 3. 读取 [references/api.md](references/api.md) 选择接口、准备请求 JSON。用 `submit --dry-run` 检查请求。实际调用前查余额，说明本轮对象、模型配置与提交阶段；用户已有的建模/绑定授权可继续使用，不额外设置批准关卡。制作 skill 或离线测试本身不需要创建收费模型。
 
+## Blender CLI 配置与验证（可选）
+
+用户要求安装或配置 Blender CLI，或本地渲染需要此工具时，读取 [Blender CLI 指南](references/blender-cli.md)，运行当前 skill 的 `scripts/setup_blender.py`。macOS 会自动探测 Blender.app，使用独立 venv 安装固定版本的 CLI-Anything，并在真实渲染出 PNG 后才报告成功。Blender 本体需预先安装；已有安装可用 `--check` 复检。此流程无需 Tripo 密钥，不产生 Tripo 费用。
+
+**已验证平台：macOS / arm64；Linux 未实机验证，Windows 安装脚本暂不支持。** 不照抄旧教程参数：全局 `--project` 放子命令之前；`render execute` 只生成脚本，随后必须实际调用 Blender 并检查图片。记录失败日志及修复措施；受限 Agent 环境崩溃时，在允许 Blender 正常运行的本机终端复检，不把生成脚本当成渲染通过。
+
 ## 首次配置引导
 
 当检查发现没有密钥，或用户问如何获取 API Key 时，在回复中直接给出以下指引，不只说“还缺 API Key”或仅丢一个 configure 命令：

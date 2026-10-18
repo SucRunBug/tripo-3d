@@ -43,6 +43,28 @@ python scripts/install.py --target agents
 
 只需要模型时不会默认搭建游戏；静态道具不会默认提交绑定和动画阶段。生成和后处理按 Tripo 官方当前账户计费。
 
+## 一键配置 Blender CLI（可选）
+
+已在 **macOS 15.7.4 / Apple Silicon arm64 / Blender 5.2.0 LTS / Python 3.14.7** 上完成安装及真实渲染验证。先安装 [Blender](https://www.blender.org/download/)，再在仓库目录运行：
+
+```bash
+# 单独配置 Blender CLI，已有 Tripo Skill 时用这条
+python3 scripts/setup_blender.py
+
+# 或在首次安装 Skill 时一起配置
+python3 scripts/install.py --with-blender
+```
+
+自动识别 Mac 的 Blender.app、下载固定版本的 CLI-Anything、创建独立 Python 环境，验证建场景、材质、相机、灯光和真实 PNG 渲染后才发布命令入口。无需 Tripo API Key，不会创建收费模型。Blender 本体需事先安装。
+
+```bash
+source "$HOME/.local/share/tripo-3d/blender-cli/activate.sh"
+cli-anything-blender --help
+blender --version
+```
+
+支持自定义安装位置和复检；Linux 有安装分支但尚未实机验证，Windows 暂不支持此安装脚本。截图教程里的部分命令已与当前上游不同，详见 [Blender CLI 安装、实测与失败排查](references/blender-cli.md)。
+
 ## 文档
 
 | 文件 | 内容 |
@@ -53,16 +75,18 @@ python scripts/install.py --target agents
 | [外形与材质验收](references/quality.md) | 参考图准备、真实网格比对、精细化判断 |
 | [游戏接入](references/game-integration.md) | 动画、控制器、IK、权重和碰撞 |
 | [来源与取舍](references/sources.md) | 参考项目、官方文档和实践经验 |
+| [Blender CLI](references/blender-cli.md) | 一键配置、macOS 实测、失败记录及修正命令 |
 
 ## 验证
 
 ```bash
 python scripts/tripo.py doctor
 python scripts/selftest.py
+python scripts/test_setup_blender.py
 python scripts/inspect_glb.py /path/to/model.glb --out audit.json
 ```
 
-附带 22 项离线测试，无需密钥、不产生 Tripo 费用；另已用实际角色 GLB 和动画文件验证结构检查脚本。外形和动态变形仍需在 3D 查看器或目标引擎中实测；基础包不捆绑 Blender 或游戏引擎。
+附带 22 项 Tripo 离线测试和 6 项 Blender 配置离线测试，无需密钥、不产生 Tripo 费用；另已用实际角色 GLB 和动画文件验证结构检查脚本。外形和动态变形仍需在 3D 查看器或目标引擎中实测；基础包不捆绑 Blender 或游戏引擎。
 
 ## 来源
 
