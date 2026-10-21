@@ -1,0 +1,4 @@
+interface:
+  display_name: "配置 Blender CLI"
+  short_description: "配置独立 Blender CLI 环境，完成真实图片渲染与失败排查"
+  default_prompt: "使用 $setup-blender-cli，配置独立 Blender CLI 环境，完成真实图片渲染与失败排查。"

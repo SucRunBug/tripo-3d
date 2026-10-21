@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tripo 资产制作"
+  short_description: "使用 Tripo 官方接口生成模型、绑定动画并检查游戏资产交付"
+  default_prompt: "使用 $tripo-assets，使用 Tripo 官方接口生成模型、绑定动画并检查游戏资产交付。"

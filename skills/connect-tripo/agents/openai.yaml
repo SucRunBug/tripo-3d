@@ -1,0 +1,4 @@
+interface:
+  display_name: "连接 Tripo"
+  short_description: "配置 Tripo API 密钥并验证账户连接，排查凭据与网络问题"
+  default_prompt: "使用 $connect-tripo，配置 Tripo API 密钥并验证账户连接，排查凭据与网络问题。"

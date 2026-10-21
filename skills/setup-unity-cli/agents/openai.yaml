@@ -1,0 +1,4 @@
+interface:
+  display_name: "配置 Unity CLI"
+  short_description: "配置国际版 Unity CLI 与 Pipeline，验证目标编辑器连接"
+  default_prompt: "使用 $setup-unity-cli，配置国际版 Unity CLI 与 Pipeline，验证目标编辑器连接。"
